@@ -1,169 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-interface Country {
-  flags: {
-    png: string;
-    svg: string;
-    alt: string;
-  };
-  name: {
-    common: string;
-    official: string;
-    nativeName: {
-      spa: {
-        official: string;
-        common: string;
-      };
-    };
-  };
-  independent: boolean;
-  unMember: boolean;
-  capital: string[];
-  region: string;
-  flag: string;
-  population: number;
-}
+import React, { ChangeEvent, useState } from "react";
+import { useQuery } from "react-query";
+import FilterSection from "./components/FilterSection";
+import ViewOptions from "./components/ViewOptions";
+import CardsView from "./components/CardView";
+import TableView from "./components/TableView";
+import { fetchCountries } from "./service/service";
+import Pagination from "./components/Pagination";
 
 const Countries: React.FC = () => {
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [nameFilter, setNameFilter] = useState('');
+  const [nameFilter, setNameFilter] = useState("");
   const [independentFilter, setIndependentFilter] = useState<boolean | null>(null);
-  const [viewOption, setViewOption] = useState<'cards' | 'table'>('cards');
+  const [viewOption, setViewOption] = useState<"cards" | "table">("cards");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-  useEffect(() => {
-    fetchCountries();
-  }, []);
+  const fetchCountriesData = async () => {
+    const data = await fetchCountries(nameFilter, independentFilter, currentPage, pageSize);
+    return data;
+  };
 
-  const handleNameFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { data: countries, refetch } = useQuery(
+    ['countries', currentPage, pageSize],
+    fetchCountriesData,
+    { keepPreviousData: false, staleTime: 5000 }
+  );
+
+  const handleNameFilterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    console.log(event.target.value)
     setNameFilter(event.target.value);
   };
 
-  const handleIndependentFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value === 'true' ? true : event.target.value === 'false' ? false : null;
+  const handleIndependentFilterChange = (
+    event: ChangeEvent<{ value: unknown }>
+  ) => {
+    const value = event.target.value === "true" ? true : event.target.value === "false" ? false : null;
     setIndependentFilter(value);
   };
 
-  const handleViewOptionChange = (option: 'cards' | 'table') => {
+  const handleFilterButtonClick = () => {
+    setCurrentPage(1);
+    refetch();
+  };
+
+  const handleClearButtonClick = () => {
+    setCurrentPage(1);
+    setNameFilter('');
+    setIndependentFilter(null);
+    refetch();
+  }
+
+  const handleViewOptionChange = (option: "cards" | "table") => {
     setViewOption(option);
   };
 
-  const fetchCountries = () => {
-    const queryParams = getCountryQueryParams();
-
-    axios
-      .get(`http://localhost:8080/countries${queryParams}`)
-      .then((response) => {
-        setCountries(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching countries:', error);
-      });
-  };
-
-  const getCountryQueryParams = (): string => {
-    const queryParams = [];
-
-    console.log('nameFilter ', nameFilter)
-
-    if (nameFilter) {
-        console.log('entrou')
-      queryParams.push(`name.common=${encodeURIComponent(nameFilter)}`);
-    }
-
-    if (independentFilter !== null) {
-      queryParams.push(`independent=${independentFilter}`);
-    }
-
-    return queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-  };
-
-  const renderCardsView = () => {
-    return countries.map((country, index) => (
-      <div key={index}>
-        <img src={country.flags.png} alt={country.flags.alt} />
-        <p>{country.name.common}</p>
-      </div>
-    ));
-  };
-
-  const renderTableView = () => {
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Official Name</th>
-            <th>Capital</th>
-            <th>Region</th>
-            <th>Population</th>
-          </tr>
-        </thead>
-        <tbody>
-          {countries.map((country, index) => (
-            <tr key={index}>
-              <td>{country.name.common}</td>
-              <td>{country.name.official}</td>
-              <td>{country.capital.join(', ')}</td>
-              <td>{country.region}</td>
-              <td>{country.population}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
     <div>
+      <FilterSection
+        nameFilter={nameFilter}
+        independentFilter={independentFilter}
+        onNameFilterChange={handleNameFilterChange}
+        onIndependentFilterChange={handleIndependentFilterChange}
+        onFilterButtonClick={handleFilterButtonClick}
+        onClearButtonClick={handleClearButtonClick}
+      />
 
-      <div>
-        <h2>Filtros</h2>
-        <div>
-          <label>
-            Nome:
-            <input type="text" value={nameFilter} onChange={handleNameFilterChange} />
-          </label>
-        </div>
-        <div>
-          <label>
-            Independente:
-            <select value={independentFilter === null ? '' : String(independentFilter)} onChange={handleIndependentFilterChange}>
-              <option value="">Todos</option>
-              <option value="true">Ativo</option>
-              <option value="false">Inativo</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <button onClick={fetchCountries}>Consultar</button>
-        </div>
-      </div>
+      <ViewOptions
+        viewOption={viewOption}
+        onViewOptionChange={handleViewOptionChange}
+      />
 
-      <h2>Opções de Visualização</h2>
-      <label>
-        <input
-          type="radio"
-          value="cards"
-          checked={viewOption === 'cards'}
-          onChange={() => handleViewOptionChange('cards')}
+      {viewOption === "cards" ? (
+        <CardsView countries={countries?.data || []} />
+      ) : (
+        <TableView countries={countries?.data || []} />
+      )}
+
+        <Pagination
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalCount={countries?.totalCount || 0}
+            onPageChange={handlePageChange}
         />
-        Cards
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="table"
-          checked={viewOption === 'table'}
-          onChange={() => handleViewOptionChange('table')}
-        />
-        Tabela
-      </label>
-
-      {viewOption === 'cards' ? renderCardsView() : renderTableView()}
     </div>
   );
 };
 
 export default Countries;
-
