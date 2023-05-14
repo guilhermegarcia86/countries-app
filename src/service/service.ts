@@ -45,3 +45,11 @@ const getCountryQueryParams = (
 
     return queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 };
+
+export const editCountry = async (id: number, country: Country) => {
+    await axios.put(`http://localhost:8080/countries/${id}`, country);
+};
+
+export const deleteCountry = async (id: number) => {
+    await axios.delete(`http://localhost:8080/countries/${id}`);
+};

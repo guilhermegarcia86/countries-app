@@ -20,4 +20,5 @@ export interface Country {
     region: string;
     flag: string;
     population: number;
+    id: number;
 }
