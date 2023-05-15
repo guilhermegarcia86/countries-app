@@ -1,22 +1,30 @@
 import React from "react";
-import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
+import { Card, CardContent, CardMedia, CardActions, Typography, Button, Box } from "@mui/material";
 import { styled } from '@mui/system';
 import { Country } from "../types/Country";
+import Grid from '@mui/material/Grid';
 
 const StyledCard = styled(Card)`
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 16px;
+  background-color: #f5f5f5;
 `;
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
+  flex-direction: column;
   align-items: center;
 `;
 
 const StyledCardMedia = styled(CardMedia)`
-  width: 100px;
-  height: 100px;
+  height: 200px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledCardActions = styled(CardActions)`
+  display: flex;
+  justify-content: center;
 `;
 
 interface CardViewProps {
@@ -31,29 +39,32 @@ const CardsView: React.FC<CardViewProps> = ({
   onDelete,
 }) => {
   return (
-    <>
+    <Grid container spacing={2}>
       {countries.map((country) => (
-        <StyledCard key={country.id}>
-          <StyledCardContent>
-            <StyledCardMedia>
-              <img src={country.flags.png} alt={country.name.common} />
-            </StyledCardMedia>
-            <Typography variant="h5" component="div">
-              {country.name.common}
-            </Typography>
-          </StyledCardContent>
-          <CardContent>
-            <Button variant="contained" onClick={() => onEdit(country)}>
-              Editar
-            </Button>
-            <Button variant="contained" onClick={() => onDelete(country)}>
-              Excluir
-            </Button>
-          </CardContent>
-        </StyledCard>
+        <Grid item xs={12} sm={6} md={4} key={country.id}>
+          <StyledCard>
+            <StyledCardContent>
+              <StyledCardMedia>
+                <img src={country.flags.png} alt={country.name.common} />
+              </StyledCardMedia>
+              <Typography variant="h5" component="div" align="center">
+                {country.name.common}
+              </Typography>
+            </StyledCardContent>
+            <StyledCardActions>
+              <Button variant="contained" onClick={() => onEdit(country)}>
+                Editar
+              </Button>
+              <Button variant="contained" onClick={() => onDelete(country)}>
+                Excluir
+              </Button>
+            </StyledCardActions>
+          </StyledCard>
+        </Grid>
       ))}
-    </>
+    </Grid>
   );
 };
 
 export default CardsView;
+

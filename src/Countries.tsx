@@ -15,7 +15,7 @@ const Countries: React.FC = () => {
   const [independentFilter, setIndependentFilter] = useState<boolean | null>(null);
   const [viewOption, setViewOption] = useState<"cards" | "table">("cards");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
