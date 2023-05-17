@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import FilterSection from "./components/FilterSection";
 import ViewOptions from "./components/ViewOptions";
