@@ -7102,32 +7102,6 @@
       "flag": "🇨🇳",
       "population": 1402112000,
       "id": 1402112000
-    },
-    {
-      "flags": {
-        "png": "https://flagcdn.com/w320/cn.png",
-        "svg": "https://flagcdn.com/cn.svg",
-        "alt": "The flag of China has a red field. In the canton are five yellow five-pointed stars — a large star and four smaller stars arranged in a vertical arc on the fly side of the large star."
-      },
-      "name": {
-        "common": "Meu país",
-        "official": "People's Republic of China",
-        "nativeName": {
-          "zho": {
-            "official": "中华人民共和国",
-            "common": "中国"
-          }
-        }
-      },
-      "independent": true,
-      "unMember": true,
-      "capital": [
-        "Beijing"
-      ],
-      "region": "Asia",
-      "flag": "🇨🇳",
-      "population": 666,
-      "id": 1
     }
   ]
 }

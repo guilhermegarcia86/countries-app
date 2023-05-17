@@ -9,13 +9,14 @@ import Pagination from "./components/Pagination";
 import { Country } from "./types/Country";
 import DeleteCountryModal from "./components/DeleteContryModal";
 import EditCountryModal from "./components/EditCountryModal";
+import { SelectChangeEvent } from "@mui/material";
 
 const Countries: React.FC = () => {
   const [nameFilter, setNameFilter] = useState("");
-  const [independentFilter, setIndependentFilter] = useState<boolean | null>(null);
+  const [independentFilter, setIndependentFilter] = useState<string>('');
   const [viewOption, setViewOption] = useState<"cards" | "table">("cards");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize] = useState(12);
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -43,15 +44,9 @@ const Countries: React.FC = () => {
   };
 
   const handleIndependentFilterChange = (
-    event: ChangeEvent<{ value: unknown }>
+    event: SelectChangeEvent
   ) => {
-    const value =
-      event.target.value === "true"
-        ? true
-        : event.target.value === "false"
-        ? false
-        : null;
-    setIndependentFilter(value);
+    setIndependentFilter(event.target.value);
   };
 
   const handleFilterButtonClick = () => {
@@ -62,7 +57,7 @@ const Countries: React.FC = () => {
   const handleClearButtonClick = () => {
     setCurrentPage(1);
     setNameFilter("");
-    setIndependentFilter(null);
+    setIndependentFilter('');
     refetch();
   };
 

@@ -1,32 +1,48 @@
 import React from "react";
-import { ChangeEvent } from "react";
 import {
+  Box,
   TextField,
-  Button,
+  FormControl,
+  InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent,
+  Button,
+  SelectChangeEvent
 } from "@mui/material";
 import { styled } from "@mui/system";
 
-const StyledTextField = styled(TextField)`
+const StyledFilterSection = styled(Box)`
+  display: flex;
   margin-bottom: 16px;
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
 `;
 
-const StyledButton = styled(Button)`
-  background-color: #f44336;
-  color: #fff;
+const StyledForm = styled(Box)`
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const StyledSelect = styled(Select)`
-  margin-bottom: 16px;
+const StyledButtons = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+`;
+
+const StyledFormControl = styled(FormControl)`
+  width: 200px;
 `;
 
 interface FilterSectionProps {
   nameFilter: string;
-  independentFilter: boolean | null;
+  independentFilter: string;
   onNameFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onIndependentFilterChange: (event: ChangeEvent<{ value: unknown }>) => void;
+  onIndependentFilterChange: (event: SelectChangeEvent) => void;
   onFilterButtonClick: () => void;
   onClearButtonClick: () => void;
 }
@@ -37,43 +53,50 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   onNameFilterChange,
   onIndependentFilterChange,
   onFilterButtonClick,
-  onClearButtonClick
+  onClearButtonClick,
 }) => {
 
   return (
-    <div>
-      <h2>Filtros</h2>
-      <div>
-        <StyledTextField
+    <StyledFilterSection>
+      <StyledForm>
+        <TextField
           label="Nome"
+          variant="standard"
           value={nameFilter}
           onChange={onNameFilterChange}
         />
-      </div>
-      <div>
-        <StyledSelect
-          label="Independente"
-          value={independentFilter || ""}
-          onChange={
-            onIndependentFilterChange as (
-              event: SelectChangeEvent<unknown>
-            ) => void
-          }
+        <StyledFormControl variant="outlined">
+          <InputLabel id="ativo-inativo-label">Ativo/Inativo</InputLabel>
+          <Select
+            labelId="ativo-inativo-label"
+            id="ativo-inativo"
+            label="Ativo/Inativo"
+            value={independentFilter}
+            onChange={onIndependentFilterChange}
+          >
+            <MenuItem value={''}>Todos</MenuItem>
+            <MenuItem value={'true'}>Ativo</MenuItem>
+            <MenuItem value={'false'}>Inativo</MenuItem>
+          </Select>
+        </StyledFormControl>
+      </StyledForm>
+      <StyledButtons mb={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ flex: 1, whiteSpace: 'nowrap', mr: 1 }}
+          onClick={onFilterButtonClick}
         >
-          <MenuItem value="">Todos</MenuItem>
-          <MenuItem value="true">Ativo</MenuItem>
-          <MenuItem value="false">Inativo</MenuItem>
-        </StyledSelect>
-      </div>
-      <div>
-        <StyledButton variant="contained" onClick={onFilterButtonClick}>
           Consultar
-        </StyledButton>
-        <StyledButton variant="contained" onClick={onClearButtonClick}>
+        </Button>
+        <Button 
+          variant="contained" 
+          sx={{ flex: 1, whiteSpace: 'nowrap' }}
+          onClick={onClearButtonClick}>
           Limpar
-        </StyledButton>
-      </div>
-    </div>
+        </Button>
+      </StyledButtons>
+    </StyledFilterSection>
   );
 };
 

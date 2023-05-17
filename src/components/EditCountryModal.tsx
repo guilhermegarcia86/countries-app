@@ -20,7 +20,13 @@ const EditCountryModal: React.FC<EditModalProps> = ({ country, onSave, onClose }
 
   const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setEditedCountry((prevCountry) => ({ ...prevCountry, [name]: value }));
+    setEditedCountry((prevCountry) => ({
+      ...prevCountry,
+      name: {
+        ...prevCountry.name,
+        [name]: value,
+      },
+    }));
   };
 
   const handleSave = () => {
@@ -33,9 +39,15 @@ const EditCountryModal: React.FC<EditModalProps> = ({ country, onSave, onClose }
       <DialogTitle>Editar País</DialogTitle>
       <DialogContent>
         <TextField
-          label="Nome"
-          name="name"
-          value={editedCountry.name.common}
+          label="Nome Comum"
+          name="common"
+          defaultValue={editedCountry.name.common}
+          onChange={handleFieldChange}
+        />
+        <TextField
+          label="Nome Oficial"
+          name="official"
+          defaultValue={editedCountry.name.official}
           onChange={handleFieldChange}
         />
         {/* Outros campos de edição */}

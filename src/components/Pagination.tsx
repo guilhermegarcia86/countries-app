@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Button, Pagination as MuiPagination } from '@mui/material';
 
 interface PaginationProps {
   currentPage: number;
@@ -22,11 +23,29 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div>
-      <button onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
-      <span>{currentPage}</span>
-      <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
-    </div>
+    <Box display="flex" justifyContent="center" marginTop={5} marginBottom={5}>
+      <Button
+        variant="contained"
+        disabled={currentPage === 1}
+        onClick={() => handlePageChange(currentPage - 1)}
+      >
+        Previous
+      </Button>
+      <Box marginLeft={1} marginRight={1} alignSelf="center">
+        <MuiPagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, page) => handlePageChange(page)}
+        />
+      </Box>
+      <Button
+        variant="contained"
+        disabled={currentPage === totalPages}
+        onClick={() => handlePageChange(currentPage + 1)}
+      >
+        Next
+      </Button>
+    </Box>
   );
 };
 

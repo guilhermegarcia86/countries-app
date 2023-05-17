@@ -4,12 +4,13 @@ import { Country } from '../types/Country';
 
 export const fetchCountries = async (
     nameFilter: string,
-    independentFilter: boolean | null,
+    independentFilter: string,
     page: number,
     limit: number
 ): Promise<CountriesResponse> => {
     try {
-        const queryParams = getCountryQueryParams(nameFilter, independentFilter, page, limit);
+        const independent = independentFilter === 'true' || independentFilter === '' ? true : false
+        const queryParams = getCountryQueryParams(nameFilter, independent, page, limit);
         const response: AxiosResponse<Country[]> = await axios.get(`http://localhost:8080/countries${queryParams}`);
         const { data, headers } = response;
         const totalCountHeader = headers['x-total-count'];

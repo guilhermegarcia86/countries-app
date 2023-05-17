@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardMedia, CardActions, Typography, Button, Box } from "@mui/material";
+import { Card, CardContent, CardMedia, CardActions, Typography, Button } from "@mui/material";
 import { styled } from '@mui/system';
 import { Country } from "../types/Country";
 import Grid from '@mui/material/Grid';

@@ -1,4 +1,13 @@
+
 import React from 'react';
+import { Box, FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import { styled } from "@mui/system";
+
+const StyledViewOptionsSection = styled(Box)`
+  margin-bottom: 16px;
+  margin-top: 20px;
+  margin-left: 12px;
+`;
 
 interface ViewOptionsProps {
   viewOption: 'cards' | 'table';
@@ -7,27 +16,28 @@ interface ViewOptionsProps {
 
 const ViewOptions: React.FC<ViewOptionsProps> = ({ viewOption, onViewOptionChange }) => {
   return (
-    <div>
-      <h2>Opções de Visualização</h2>
-      <label>
-        <input
-          type="radio"
-          value="cards"
-          checked={viewOption === 'cards'}
-          onChange={() => onViewOptionChange('cards')}
-        />
-        Cards
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="table"
-          checked={viewOption === 'table'}
-          onChange={() => onViewOptionChange('table')}
-        />
-        Tabela
-      </label>
-    </div>
+    <StyledViewOptionsSection marginTop={2}>
+      <FormControl component="fieldset">
+        <RadioGroup
+          aria-label="viewOptions"
+          name="viewOptions"
+          value={viewOption}
+          onChange={(e) => onViewOptionChange(e.target.value as 'cards' | 'table')}
+          row
+        >
+          <FormControlLabel
+            value="cards"
+            control={<Radio />}
+            label="Cards"
+          />
+          <FormControlLabel
+            value="table"
+            control={<Radio />}
+            label="Tabela"
+          />
+        </RadioGroup>
+      </FormControl>
+    </StyledViewOptionsSection>
   );
 };
 
