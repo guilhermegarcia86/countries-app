@@ -43,7 +43,6 @@ interface FilterSectionProps {
   independentFilter: string;
   onNameFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onIndependentFilterChange: (event: SelectChangeEvent) => void;
-  onFilterButtonClick: () => void;
   onClearButtonClick: () => void;
 }
 
@@ -52,7 +51,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   independentFilter,
   onNameFilterChange,
   onIndependentFilterChange,
-  onFilterButtonClick,
   onClearButtonClick,
 }) => {
 
@@ -81,14 +79,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         </StyledFormControl>
       </StyledForm>
       <StyledButtons mb={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ flex: 1, whiteSpace: 'nowrap', mr: 1 }}
-          onClick={onFilterButtonClick}
-        >
-          Consultar
-        </Button>
         <Button 
           variant="contained" 
           sx={{ flex: 1, whiteSpace: 'nowrap' }}

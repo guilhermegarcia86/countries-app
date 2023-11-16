@@ -16,7 +16,7 @@ const Countries: React.FC = () => {
   const [independentFilter, setIndependentFilter] = useState<string>('');
   const [viewOption, setViewOption] = useState<"cards" | "table">("cards");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(12);
+  const pageSize = 12;
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -32,7 +32,7 @@ const Countries: React.FC = () => {
   };
 
   const { data: countries, refetch } = useQuery(
-    ["countries", currentPage, pageSize],
+    ["countries", currentPage, nameFilter, independentFilter],
     fetchCountriesData,
     { keepPreviousData: false, staleTime: Infinity, cacheTime: 0 }
   );
@@ -49,16 +49,10 @@ const Countries: React.FC = () => {
     setIndependentFilter(event.target.value);
   };
 
-  const handleFilterButtonClick = () => {
-    setCurrentPage(1);
-    refetch();
-  };
-
   const handleClearButtonClick = () => {
     setCurrentPage(1);
     setNameFilter("");
     setIndependentFilter('');
-    refetch();
   };
 
   const handleViewOptionChange = (option: "cards" | "table") => {
@@ -103,7 +97,6 @@ const Countries: React.FC = () => {
         independentFilter={independentFilter}
         onNameFilterChange={handleNameFilterChange}
         onIndependentFilterChange={handleIndependentFilterChange}
-        onFilterButtonClick={handleFilterButtonClick}
         onClearButtonClick={handleClearButtonClick}
       />
 

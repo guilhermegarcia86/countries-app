@@ -14,6 +14,14 @@ Aplicação que lista países, suas bandeiras e dados.
 
 </div>
 
+## Configurar versão do Node
+
+Se estiver usando o utilitário `nvm` basta executar o comando no terminal do projeto:
+
+```bash
+nvm use
+```
+
 ## Instalar dependências
 
 ```bash
